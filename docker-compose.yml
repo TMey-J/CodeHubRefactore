@@ -1,0 +1,63 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: codehub
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - codehub_network
+
+  api:
+    build: .
+    ports:
+      - "5002:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__MigrateOnStartup: "true"
+      ConnectionStrings__Write: Host=db;Port=5432;Database=codehub;Username=postgres;Password=12345678
+      ConnectionStrings__Read: Host=db;Port=5432;Database=codehub;Username=postgres;Password=12345678
+      Jwt__SecretKey: ${JWT_SECRET_KEY:-090d83b21709d86e10c202e128a4fee1265151dfa7bdfeee55fba96ce80bbc97}
+      SambaNova__ApiKeys__0: ${SAMBANOVA_API_KEY_0:-}
+      SambaNova__ApiKeys__1: ${SAMBANOVA_API_KEY_1:-}
+      SambaNova__ApiKeys__2: ${SAMBANOVA_API_KEY_2:-}
+      SambaNova__ApiKeys__3: ${SAMBANOVA_API_KEY_3:-}
+    volumes:
+      - storage_data:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - codehub_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: codehub-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@exam.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5053:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - codehub_network
+
+volumes:
+  db_data:
+  storage_data:
+
+networks:
+  codehub_network:
+    driver: bridge

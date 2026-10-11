@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CodeHub.Api/CodeHub.Api.csproj" />
+  <Project Path="CodeHub.Application/CodeHub.Application.csproj" />
+  <Project Path="CodeHub.Domain/CodeHub.Domain.csproj" />
+  <Project Path="CodeHub.Infrastructure/CodeHub.Infrastructure.csproj" />
+</Solution>

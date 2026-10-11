@@ -1,0 +1,44 @@
+## Ignore build outputs and user-specific files
+bin/
+obj/
+out/
+
+## Visual Studio / Rider / VS Code user files
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+## Publish output
+[Pp]ublish/
+*.publishsettings
+PublishScripts/
+
+## NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+.nuget/
+*.nuget.props
+*.nuget.targets
+
+## Test / coverage
+TestResults/
+[Tt]est[Rr]esult*/
+coverage*.json
+coverage*.xml
+*.coverage
+*.coveragexml
+
+## OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+## Secrets / local environment
+appsettings.*.Local.json
+secrets.json
+.env
